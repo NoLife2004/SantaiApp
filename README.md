@@ -116,7 +116,8 @@ The app uses `StyleSheet.create` for consistent and maintainable styling. Key st
 - `statusBadge`: Color-coded badges for task status (Pending/Completed).
 
 ## Screenshots
-(Include screenshots of the app running on a device or emulator here.)
+![WhatsApp Image 2025-06-18 at 08 01 30_e1677eaf](https://github.com/user-attachments/assets/190053e1-79f0-469d-a998-e17904026929)
+
 
 ## Future Improvements
 1. **Add Task Functionality**: Allow users to add new tasks.
