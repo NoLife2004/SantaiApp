@@ -150,8 +150,9 @@ The app uses `StyleSheet.create` for consistent and maintainable styling. Key st
 - `statusBadge`: Color-coded badges for task status (Pending/Completed).
 
 ## Screenshots
-![Screenshot_20250620_085505_Expo_Go](https://github.com/user-attachments/assets/c44a6977-61d9-44b5-a714-0fe4389ccfd6)
-![Screenshot_20250620_085455_Expo_Go](https://github.com/user-attachments/assets/c4d47b68-a78e-49dd-beaa-0105d5b55078)
+![IMG-20250620-WA0013](https://github.com/user-attachments/assets/84fa0754-e9c1-4928-a010-fb0a32c31562)
+![IMG-20250620-WA0012](https://github.com/user-attachments/assets/4a3481ca-ebea-4a72-bdb3-36bd3acdfe21)
+
 
 ## Future Improvements
 1. **Local Storage**: Save tasks using `AsyncStorage` or a database.
