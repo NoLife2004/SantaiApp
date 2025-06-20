@@ -38,6 +38,7 @@ SantaiApp/
 ├── node_modules/      # Dependencies
 ├── pages/             # UI components
 │   └── Home.js        # Main screen with to-do list functionality
+│   └── Task.js        # Main screen with add a task functionality
 ├── App.js             # Main entry point of the application
 ├── app.json           # Configuration file for the app
 ├── index.js           # Entry point where the app is rendered
@@ -53,55 +54,88 @@ The main screen of the app includes:
 - Styling for tasks, status badges, and separators.
 
 ```javascript
-import React from "react";
-import { View, Text, TextInput, SafeAreaView, StyleSheet, FlatList } from "react-native";
-import { FontAwesome } from "@expo/vector-icons";
+import React, { useState, useEffect } from "react";
+import { 
+View, Text, TextInput, SafeAreaView, StyleSheet, 
+FlatList, ActivityIndicator, TouchableOpacity 
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
-const tasks = [
-  { id: "1", task: "Buy groceries", date: "Jul 20, 2023 at 9:00 AM", status: "Pending" },
-  // More tasks...
-];
+const Home = ({ navigation, route }) => {
+const [search, setSearch] = useState("");
+const [tasks, setTasks] = useState([]);
+const [isLoading, setIsLoading] = useState(true);
 
-const Home = () => {
-  return (
+// Load initial data + handle new task dari Task screen
+useEffect(() => {
+    const initialTasks = [
+    { id: "1", task: "Buy groceries", date: "Jul 20, 2023 at 9:00 AM", status: "Pending" },
+    // More tasks...
+    ];
+
+    setTasks(initialTasks);
+    setIsLoading(false);
+
+    // If there is a new tash from the Task Screen
+    if (route.params?.newTask) {
+    setTasks(prev => [...prev, route.params.newTask]);
+    }
+}, [route.params]);
+
+const filteredTasks = tasks.filter(item => 
+    item.task.toLowerCase().includes(search.toLowerCase())
+);
+
+if (isLoading) {
+    return (
+    <SafeAreaView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#4cd964" />
+        <Text style={{ marginTop: 12 }}>Loading...</Text>
+    </SafeAreaView>
+    );
+}
+
+return (
     <SafeAreaView style={styles.container}>
-      <FlatList
-        data={tasks}
+    <FlatList
+        data={filteredTasks}
         keyExtractor={(item) => item.id}
         contentContainerStyle={styles.contentContainer}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListHeaderComponent={
-          <>
+        <>
             <Text style={styles.title}>To Do List</Text>
             <TextInput
-              style={styles.searchInput}
-              placeholder="Search"
-              onChangeText={(text) => console.log(text)}
+            style={styles.searchInput}
+            placeholder="Search"
+            value={search}
+            onChangeText={setSearch}
             />
-          </>
+        </>
         }
         renderItem={({ item }) => (
-          <View style={styles.taskItem}>
+        <TouchableOpacity 
+            style={styles.taskItem}
+            onPress={() => navigation.navigate('Task', { taskData: item })}
+        >
             <View style={{ flex: 1 }}>
-              <Text style={styles.taskTitle}>{item.task}</Text>
-              <Text style={styles.taskDate}>{item.date}</Text>
+            <Text style={styles.taskTitle}>{item.task}</Text>
+            <Text style={styles.taskDate}>{item.date}</Text>
             </View>
             <View style={styles.rightSide}>
-              <View
-                style={[
-                  styles.statusBadge,
-                  item.status === "Completed" ? styles.completed : styles.pending,
-                ]}
-              >
+            <View style={[
+                styles.statusBadge,
+                item.status === "Completed" ? styles.completed : styles.pending,
+            ]}>
                 <Text style={styles.statusText}>{item.status}</Text>
-              </View>
-              <FontAwesome name="chevron-right" size={20} color="#888" />
             </View>
-          </View>
+            <Ionicons name="chevron-forward" size={20} color="#888" />
+            </View>
+        </TouchableOpacity>
         )}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-      />
+    />
     </SafeAreaView>
-  );
+);
 };
 
 // Styles omitted for brevity (refer to the project files for details)
@@ -120,10 +154,9 @@ The app uses `StyleSheet.create` for consistent and maintainable styling. Key st
 
 
 ## Future Improvements
-1. **Add Task Functionality**: Allow users to add new tasks.
-2. **Local Storage**: Save tasks using `AsyncStorage` or a database.
-3. **Dark Mode**: Implement a dark/light theme toggle.
-4. **Task Filtering**: Filter tasks by status (Pending/Completed).
+1. **Local Storage**: Save tasks using `AsyncStorage` or a database.
+2. **Dark Mode**: Implement a dark/light theme toggle.
+3. **Task Filtering**: Filter tasks by status (Pending/Completed).
 
 ## License
 This project is open-source and available under the MIT License.
